@@ -65,3 +65,29 @@ main{
     font-size: clamp(6px, 4vw, 1rem);
     box-shadow: -4px 5px 0 #5c5b5b;
 }
+
+.buttons{
+    position: absolute;
+    bottom: 10%;
+    left: 50%;
+    width: 65%;
+    transform: translate(-57%, 10%);
+    display: flex;
+    gap:18px;
+}
+
+.button{
+    width: 50%;
+    padding: 4%;
+    border: 2px solid #555454;
+    border-radius: 6px;
+    font-size: clamp(6px, 4vw, 1rem);
+    font-weight: 600;
+    background-color: rgb(240, 240, 204);
+    box-shadow: -4px 5px 0 #5c5b5b;
+}
+
+.button:active{
+    background-color: #a2ed93;
+    box-shadow: inset -4px 4px #000000;
+}
