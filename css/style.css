@@ -1,0 +1,48 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Montserrat', cursive;
+}
+
+body{
+    text-align: center;
+    background: linear-gradient(to bottom, #a2ed93, #fff);
+    min-height: 100vh;
+}
+
+main{
+    display: inline-block;
+    margin-top: 2%;
+    padding: 15px;
+    position: relative;
+}
+
+.pokedex{
+    width: 100%;
+    max-width: 425px;
+}
+
+.pokemon__image{
+    position: absolute;
+    bottom: 55%;
+    left: 50%;
+    transform: translate(-65%, 20%);
+    height: 18%;
+}
+
+.pokemon__data{
+    position: absolute;
+    font-weight: 500;
+    color: black;
+    top: 53%;
+    right: 28%;
+    font-size: clamp(9px, 5vw, 25px);
+}
+
+.pokemon__name{
+    color: rgb(50, 49, 49);
+    text-transform: capitalize;
+}
