@@ -46,3 +46,22 @@ main{
     color: rgb(50, 49, 49);
     text-transform: capitalize;
 }
+
+.form{
+    position: absolute;
+    width: 64%;
+    top: 65%;
+    left: 13%;
+}
+
+.input__search{
+    width: 100%;
+    padding: 5%;
+    outline: none;
+    border: 3px solid #555454;
+    border-radius: 6px;
+    font-weight: 500;
+    color:#555454;
+    font-size: clamp(6px, 4vw, 1rem);
+    box-shadow: -4px 5px 0 #5c5b5b;
+}
