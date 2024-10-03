@@ -17,7 +17,13 @@
 - JavaScript
 - Poke API
 
+## Passos para Instalar as Dependências e Executar a Aplicação1
+1. Clone o repositório
+
+2. Navegue até o diretório do projeto:
+
+3. Abra o arquivo `index.html` em um navegador.
+
 ## Contato
 Maria Fernanda Almeida - m.franchidealmeida@gmail.com
 
-![Bulbasaur](https://tenor.com/br8TW.gif)
