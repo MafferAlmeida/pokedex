@@ -28,6 +28,80 @@ body {
     text-decoration: none;
 }
 
+.search-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+}
+
+.search-input {
+    width: 300px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.search-button {
+    padding: 10px 20px;
+    margin-left: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #4ed4d4;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.search-button:hover {
+    background-color: #36a1a1;
+}
+
+.filters {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.filter-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.filter-button {
+    background-color: #004d00;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    margin: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.filter-button:hover {
+    background-color: #003300;
+}
+
+.clear-filters-button {
+    background-color: #ff6347;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    margin-top: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.clear-filters-button:hover {
+    background-color: #ff4500;
+}
+
 .card-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
@@ -42,10 +116,25 @@ body {
     padding: 10px;
     cursor: pointer;
     transition: transform 0.2s;
+    position: relative;
 }
 
 .card:hover {
     transform: scale(1.05);
+}
+
+.card .heart {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    color: #080808; 
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.card .heart.favorited {
+    color: #ff0000;
 }
 
 .pokemon__image-detail {
@@ -109,4 +198,8 @@ body {
     display: flex;
     gap: 10px;
     margin-top: 10px;
+}
+
+.filter-button.active {
+    background-color: #003300;
 }

@@ -6,111 +6,150 @@ const pokemonNameDetail = document.querySelector('.pokemon__name-detail');
 const statsList = document.querySelector('.stats-list');
 const typesContainer = document.querySelector('.types');
 const evolutionsContainer = document.querySelector('.evolutions');
+const searchInput = document.querySelector('.search-input');
+const searchButton = document.querySelector('.search-button');
+const clearFiltersButton = document.querySelector('.clear-filters-button');
+
+let allPokemons = [];
+const selectedTypes = new Set();
+let favoritePokemons = JSON.parse(localStorage.getItem('favoritePokemons')) || [];
 
 const fetchPokemons = async () => {
-    const promises = [];
-    for (let i = 1; i <= 150; i++) {
-        promises.push(fetch(`https://pokeapi.co/api/v2/pokemon/${i}`).then(res => res.json()));
-    }
-    const pokemons = await Promise.all(promises);
-    displayPokemons(pokemons);
+    const response = await fetch('https://pokeapi.co/api/v2/pokemon?limit=100');
+    const data = await response.json();
+    allPokemons = await Promise.all(data.results.map(async (pokemon) => {
+        const pokemonData = await fetch(pokemon.url);
+        return await pokemonData.json();
+    }));
+    displayPokemons(allPokemons);
 };
 
 const displayPokemons = (pokemons) => {
+    cardContainer.innerHTML = '';
     pokemons.forEach(pokemon => {
         const card = document.createElement('div');
         card.classList.add('card');
+        const isFavorited = favoritePokemons.includes(pokemon.id);
         card.innerHTML = `
+            <span class="heart ${isFavorited ? 'favorited' : ''}">&#9825;</span>
             <img src="${pokemon.sprites.front_default}" alt="${pokemon.name}">
-            <h2>${pokemon.name}</h2>
+            <h3>${pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}</h3>
         `;
+        card.style.backgroundColor = getTypeColor(pokemon.types[0].type.name);
         card.addEventListener('click', () => showDetails(pokemon));
+        
+        const heart = card.querySelector('.heart');
+        heart.addEventListener('click', (event) => {
+            event.stopPropagation();
+            toggleFavorite(pokemon.id);
+            heart.classList.toggle('favorited');
+        });
+        
         cardContainer.appendChild(card);
     });
 };
 
-const showDetails = async (pokemon) => {
+const showDetails = (pokemon) => {
     pokemonImageDetail.src = pokemon.sprites.front_default;
     pokemonNameDetail.innerHTML = pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1);
     statsList.innerHTML = '';
     typesContainer.innerHTML = '';
     evolutionsContainer.innerHTML = '';
-
-    for (const stat of pokemon.stats) {
+    
+    pokemon.stats.forEach(stat => {
         const li = document.createElement('li');
         li.innerHTML = `${stat.stat.name}: ${stat.base_stat}`;
         statsList.appendChild(li);
-    }
-
-    for (const type of pokemon.types) {
+    });
+    pokemon.types.forEach(type => {
         const typeDiv = document.createElement('div');
         typeDiv.classList.add('type');
         typeDiv.style.backgroundColor = getTypeColor(type.type.name);
         typeDiv.innerHTML = type.type.name.charAt(0).toUpperCase() + type.type.name.slice(1);
         typesContainer.appendChild(typeDiv);
-    }
-
-    await fetchEvolutions(pokemon.species.url);
+    });
     modal.style.display = "block";
 };
 
-const fetchEvolutions = async (speciesUrl) => {
-    const response = await fetch(speciesUrl);
-    const speciesData = await response.json();
-    const evolutionChainUrl = speciesData.evolution_chain.url;
-
-    const evolutionResponse = await fetch(evolutionChainUrl);
-    const evolutionData = await evolutionResponse.json();
-
-    displayEvolutions(evolutionData.chain);
-};
-
-const displayEvolutions = (chain) => {
-    let currentChain = chain;
-
-    while (currentChain) {
-        const evolutionDiv = document.createElement('div');
-        evolutionDiv.innerHTML = `
-            <img src="https://pokeapi.co/media/sprites/pokemon/${currentChain.species.url.split('/')[6]}.png" alt="${currentChain.species.name}">
-            <span>${currentChain.species.name.charAt(0).toUpperCase() + currentChain.species.name.slice(1)}</span>
-        `;
-        evolutionsContainer.appendChild(evolutionDiv);
-        currentChain = currentChain.evolves_to[0];
+const toggleFavorite = (id) => {
+    if (favoritePokemons.includes(id)) {
+        favoritePokemons = favoritePokemons.filter(favoriteId => favoriteId !== id);
+    } else {
+        favoritePokemons.push(id);
     }
+    localStorage.setItem('favoritePokemons', JSON.stringify(favoritePokemons));
 };
 
 const getTypeColor = (type) => {
     const colors = {
-        bug: '#A8B400',
-        dark: '#5A5A5A',
-        dragon: '#6F36B7',
-        electric: '#E8D400',
-        fairy: '#D16FCE',
-        fighting: '#C03028',
-        fire: '#F54B2B',
-        flying: '#A49DF0',
-        ghost: '#4F3C4F',
-        grass: '#68C31E',
-        ground: '#D5B34B',
-        ice: '#7BC0D7',
-        normal: '#A8A8A8',
-        poison: '#7F2D86',
-        psychic: '#F452A2',
-        rock: '#B8A434',
-        steel: '#B7B6D7',
-        water: '#2B4BB4'
+        water: '#b3e0ff',
+        fire: '#ffcccb',
+        grass: '#c2f0c2',
+        electric: '#fff4b2',
+        ice: '#cce7ff',
+        bug: '#e6ffb3',
+        normal: '#f8e6b3',
+        fighting: '#ffb3e6',
+        poison: '#d8a3d8',
+        ground: '#e4c9a6',
+        fairy: '#ffebee',
+        rock: '#d0c8b0',
+        ghost: '#e6d4f0',
+        dragon: '#ffcccb',
+        psychic: '#d1c4e9',
     };
-    return colors[type] || '#FFF';
+    return colors[type] || '#ffffff';
 };
 
-closeButton.onclick = () => {
+closeButton.addEventListener('click', () => {
     modal.style.display = "none";
-};
+});
 
-window.onclick = (event) => {
+window.addEventListener('click', (event) => {
     if (event.target === modal) {
         modal.style.display = "none";
     }
+});
+
+const filterPokemons = () => {
+    const searchTerm = searchInput.value.toLowerCase();
+    const filteredPokemons = allPokemons.filter(pokemon => {
+        const matchesSearchTerm = pokemon.name.toLowerCase().includes(searchTerm) || 
+                                   pokemon.id.toString() === searchTerm;
+        const matchesType = selectedTypes.size === 0 || 
+            pokemon.types.some(type => selectedTypes.has(type.type.name));
+        return matchesSearchTerm && matchesType;
+    });
+
+    if (filteredPokemons.length > 0) {
+        displayPokemons(filteredPokemons);
+    } else {
+        cardContainer.innerHTML = '<h2>Nenhum Pokémon encontrado :(</h2>';
+    }
 };
+
+document.querySelectorAll('.filter-button').forEach(button => {
+    button.addEventListener('click', () => {
+        const type = button.dataset.type;
+        if (selectedTypes.has(type)) {
+            selectedTypes.delete(type);
+            button.classList.remove('active');
+        } else {
+            selectedTypes.add(type);
+            button.classList.add('active');
+        }
+        filterPokemons();
+    });
+});
+
+searchButton.addEventListener('click', filterPokemons);
+searchInput.addEventListener('input', filterPokemons);
+
+clearFiltersButton.addEventListener('click', () => {
+    selectedTypes.clear();
+    document.querySelectorAll('.filter-button').forEach(button => button.classList.remove('active'));
+    searchInput.value = '';
+    displayPokemons(allPokemons);
+});
 
 fetchPokemons();

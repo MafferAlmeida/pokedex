@@ -30,11 +30,11 @@ body {
     cursor: pointer;
     display: flex;
     align-items: center;
-    text-decoration: none; /* Remove underline */
+    text-decoration: none; 
 }
 
 .menu__item:hover {
-    text-decoration: underline; /* Adiciona sublinhado ao passar o mouse */
+    text-decoration: underline; 
 }
 
 main {

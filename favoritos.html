@@ -3,16 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <link rel="icon" type="image/png" sizes="16x16" href="./favicons/png-transparent-pokemon-ball-pokeball-area-wiki-technology-thumbnail.png">
-    <link rel="stylesheet" href="./css/style.css">
-
-    <script defer src="./js/script.js"></script>
-
+    <link rel="stylesheet" href="./css/favoritos.css">
+    <script defer src="./js/favoritos.js"></script>
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="theme-color" content="#ffffff">
-
-    <title>Favoritos</title>
+    <title>Pokémons Favoritados</title>
 </head>
 <body>
     <nav class="menu">
@@ -20,24 +16,10 @@
         <a href="mais_detalhes.html" class="menu__item">Mais detalhes</a>
         <a href="favoritos.html" class="menu__item">Favoritos</a>
     </nav>
-    
+
     <main>
-        <img src="" alt="pokemon" class="pokemon__image">
-        <h1 class="pokemon__data">
-            <span class="pokemon__number"></span> - 
-            <span class="pokemon__name"></span> 
-        </h1>
-
-        <form class="form">
-            <input type="search" class="input__search" placeholder="Nome ou Número" required>
-        </form>
-
-        <div class="buttons">
-            <button class="button btn-prev">Anterior &#60; </button>
-            <button class="button btn-next">Próximo &#62; </button>
-        </div>
-
-        <img src="./image/pokedex.png" alt="pokedex" class="pokedex">
+        <h1>Pokémons Favoritados</h1>
+        <div class="card-container"></div>
     </main>
 </body>
 </html>
